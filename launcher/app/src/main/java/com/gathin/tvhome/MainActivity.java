@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -414,7 +415,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 return String.valueOf(a.loadLabel(this)).compareToIgnoreCase(String.valueOf(b.loadLabel(this)));
             });
             for (TvInputInfo info : inputs) {
-                if (info.getType() == TvInputInfo.TYPE_TUNER && info.getServiceInfo().packageName.startsWith("com.mediatek")
+                if (info.getType() == TvInputInfo.TYPE_TUNER
+                        && (info.getServiceInfo().applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0
                         && (tunerId == null || info.getId().compareTo(tunerId) < 0)) {
                     tunerId = info.getId();
                 }
