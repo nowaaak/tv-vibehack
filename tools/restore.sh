@@ -8,8 +8,11 @@ cd "$(dirname "$0")/.."
 LIST="${1:?usage: restore.sh <debloat list> [stock launcher package]}"
 STOCK="${2:-com.google.android.tvlauncher}"
 PY=tools/venv/bin/python
+[ -x "$PY" ] || PY=tools/venv/Scripts/python.exe
+export MSYS_NO_PATHCONV=1
 {
-  grep -vE '^\s*(#|$)' "$LIST" | sed -E 's/\s+#.*$//' | awk '{print "pm enable " $1}'
+  grep -vE '^\s*(#|$)' "$LIST" | sed -E 's/\s+#.*$//' | awk '{print "cmd package install-existing " $1; print "pm enable " $1}'
+  echo "cmd package install-existing $STOCK"
   echo "pm enable $STOCK"
   echo "cmd package set-home-activity --user 0 $STOCK"
   echo "settings put global window_animation_scale 1.0"
